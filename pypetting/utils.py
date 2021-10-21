@@ -49,7 +49,6 @@ def mca_well_select(row, col, nrows, ncols):
         def _use_well(_well):
             return (_well // nrows) % 2 == col and (_well % nrows) % 2 == row
         encoder = 2 ** np.arange(enc) * np.array(list(map(_use_well, np.arange(enc) + well)))
-        print(encoder)
         return chr(sum(encoder) + 48) if sum(encoder) > 0 else "0"
 
     nwells = nrows * ncols

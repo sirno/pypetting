@@ -5,6 +5,7 @@ from .utils import bin_to_dec, volumes_to_string, well_select, mca_well_select
 __all__ = ["aspirate", "dispense", "mix", "wash", "mca_aspirate", "mca_dispense"]
 
 labwares = {
+    "trough100": (8, 1),
     "greiner96": (8, 12),
     "greiner384": (16, 24),
 }

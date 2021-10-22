@@ -14,20 +14,21 @@ def transfer_labware(
 ):
     """Transfer labware with RoMa."""
     return (
-        "B;TransferRack("
-        f"{src_grid},"
-        f"{dest_grid},"
+        "B;Transfer_Rack("
+        f'"{src_grid}",'
+        f'"{dest_grid}",'
         f"{back_home:#d},"
+        f"{bool(lid_grid):#d},"
         "1,0,"
-        f"{cover:#d},"
-        f"{lid_grid},"
-        f"{rack_type},"
-        "Narrow,",
+        f"{not cover:#d},"
+        f'"{lid_grid}",'
+        f'"{rack_type}",'
+        '"Narrow",'
         '"","",'
-        "MP 3Pos,"
-        "MP 3Pos,"
-        "MP 3Pos,"
-        f"{src_site},"
-        f"{lid_site},"
-        f"{dest_site});",
+        '"MP 3Pos Fixed",'
+        '"MP 3Pos Fixed",'
+        '"MP 3Pos Fixed",'
+        f'"{src_site + 1}",'
+        f'"{lid_site + 1}",'
+        f'"{dest_site + 1}");'
     )

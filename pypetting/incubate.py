@@ -1,12 +1,7 @@
 """FACTS commands, specifically for StoreX incubator"""
 
-def facts(
-    device,
-    command,
-    parameter,
-    needs_labware,
-    allowed_labware
-):
+
+def facts(device, command, parameter, needs_labware, allowed_labware):
     """General FACTS command"""
     return (
         "B;FACTS("
@@ -18,15 +13,15 @@ def facts(
         ");"
     )
 
-# StoreX commands
 
 def _facts_storeX(command, parameter, needs_labware, allowed_labware):
     """facts for storeX"""
     return (
-        facts("StoreX", command, parameter, needs_labware, allowed_labware) +
-        "\n" +
-        _end_access()
+        facts("StoreX", command, parameter, needs_labware, allowed_labware)
+        + "\n"
+        + _end_access()
     )
+
 
 def _end_access():
     """End StoreX interactions"""
@@ -45,7 +40,9 @@ def read_plates_in_cartridge(cartridge):
 
 def present_plate(cartridge, position, labware):
     """Present plate"""
-    return _facts_storeX("StoreX_PresentPlate", f'"{cartridge},{position}"', "1", labware)
+    return _facts_storeX(
+        "StoreX_PresentPlate", f'"{cartridge},{position}"', "1", labware
+    )
 
 
 def return_plate(cartridge, position):
@@ -55,7 +52,9 @@ def return_plate(cartridge, position):
 
 def present_plate_by_bc(bc_file_path, bc_file_line, labware):
     """Present plate by barcode from file"""
-    return _facts_storeX("StoreX_PresentPlateByBarcode", f'"{bc_file_line},{bc_file_path}"', "1", labware)
+    return _facts_storeX(
+        "StoreX_PresentPlateByBarcode", f'"{bc_file_line},{bc_file_path}"', "1", labware
+    )
 
 
 def return_plate_by_bc():

@@ -13,6 +13,10 @@ def facts(device, command, parameter, needs_labware, allowed_labware):
         ");"
     )
 
+def _end_access():
+    """End StoreX interactions"""
+    return facts("StoreX", "StoreX_EndAccess", "", "0", "")
+
 
 def _facts_storeX(command, parameter, needs_labware, allowed_labware):
     """facts for storeX"""
@@ -21,11 +25,6 @@ def _facts_storeX(command, parameter, needs_labware, allowed_labware):
         + "\n"
         + _end_access()
     )
-
-
-def _end_access():
-    """End StoreX interactions"""
-    return _facts_storeX("StoreX_EndAccess", "", "0", "")
 
 
 def read_all_barcodes():

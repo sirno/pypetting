@@ -42,14 +42,14 @@ def well_select(volumes, row, col, nrows, ncols, spacing):
     return "".join(sequence)
 
 
-def mca_well_select(row, col, nrows, ncols, spacing):
+def mca_well_select(row, col, nrows, ncols, mca_spacing):
     """Generate well select string for mca."""
     row = (row - 1) % 2
     col = (col - 1) % 2
 
     def _encode_mca_well_select(well, enc=7):
         def _use_well(_well):
-            return (spacing == 1) or (
+            return (mca_spacing == 1) or (
                 (_well // nrows) % 2 == col and (_well % nrows) % 2 == row
             )
 

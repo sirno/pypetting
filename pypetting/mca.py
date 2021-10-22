@@ -12,7 +12,7 @@ def mca_aspirate(volume, liquid_class, grid, site, row, col, labware):
         f"{volume},"
         f"{grid},"
         f"{site},"
-        f'"{mca_well_select(row, col, *labwares[labware])}",'
+        f'"{mca_well_select(row, col, **labwares[labware])}",'
         "0,0);"
     )
 
@@ -25,7 +25,7 @@ def mca_dispense(volume, liquid_class, grid, site, row, col, labware):
         f"{volume},"
         f"{grid},"
         f"{site},"
-        f'"{mca_well_select(row, col, *labwares[labware])}",'
+        f'"{mca_well_select(row, col, **labwares[labware])}",'
         "0,0);"
     )
 
@@ -38,7 +38,7 @@ def mca_mix(volume, liquid_class, grid, site, row, col, labware):
         f"{volume},"
         f"{grid},"
         f"{site},"
-        f'"{mca_well_select(row, col, *labwares[labware])}",'
+        f'"{mca_well_select(row, col, **labwares[labware])}",'
         "0,0);"
     )
 

@@ -12,6 +12,8 @@ def aspirate(
     volumes, liquid_class, grid, site, spacing=1, row=1, col=1, labware="greiner96"
 ):
     """Advanced aspirate command."""
+    if isinstance(volumes, int | float):
+        volumes = np.array([volumes] * 8)
     tip_select = bin_to_dec(volumes > 0)
     return (
         "B;Aspirate("
@@ -21,7 +23,7 @@ def aspirate(
         f"{grid},"
         f"{site},"
         f"{spacing},"
-        f'"{well_select(volumes, row, col, *labwares[labware], spacing)}",'
+        f'"{well_select(volumes, row, col, spacing=spacing, **labwares[labware])}",'
         "0,0);"
     )
 
@@ -30,6 +32,8 @@ def dispense(
     volumes, liquid_class, grid, site, spacing=1, row=1, col=1, labware="greiner96"
 ):
     """Advanced dispense command."""
+    if isinstance(volumes, int | float):
+        volumes = np.array([volumes] * 8)
     tip_select = bin_to_dec(volumes > 0)
     return (
         "B;Dispense("
@@ -39,7 +43,7 @@ def dispense(
         f"{grid},"
         f"{site},"
         f"{spacing},"
-        f'"{well_select(volumes, row, col, *labwares[labware], spacing)}",'
+        f'"{well_select(volumes, row, col, spacing=spacing, **labwares[labware])}",'
         "0,0);"
     )
 
@@ -57,7 +61,7 @@ def mix(
         f"{grid},"
         f"{site},"
         f"{spacing},"
-        f'"{well_select(volumes, row, col, *labwares[labware], spacing)}",'
+        f'"{well_select(volumes, row, col, spacing=spacing, **labwares[labware])}",'
         "0,0);"
     )
 
@@ -68,10 +72,10 @@ def wash(waste_volume, cleaner_volume, station):
         "B;Wash("
         "255,"
         f"{station},1,{station},0,"
-        f'"{str(waste_volume)}",'
-        f"200,"
-        f'"{str(cleaner_volume)}",'
-        "10,70,30,0,0,1000,0);"
+        f'"{waste_volume}",'
+        f"500,"
+        f'"{cleaner_volume}",'
+        "0,10,70,30,0,0,1000,0);"
     )
 
 

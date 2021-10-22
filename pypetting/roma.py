@@ -25,7 +25,7 @@ def transfer_labware(
         f'"{rack_type}",'
         '"Narrow",'
         '"","",'
-        '"MP 3Pos Fixed",'
+        '"StoreX 22Pos",'
         '"MP 3Pos Fixed",'
         '"MP 3Pos Fixed",'
         f'"{src_site + 1}",'

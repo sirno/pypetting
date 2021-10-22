@@ -1,6 +1,10 @@
 """Tip handling."""
 
 
+def move_liha(grid, site, spacing=1, labware="greiner96"):
+    """Move LiHa to grid site."""
+
+
 def mca_get_tips(grid, site, airgap=20):
     """Get tips for mca."""
     return f"B;MCAGetDitis({grid},{site},{airgap},96,0,0);"

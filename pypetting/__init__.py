@@ -1,7 +1,7 @@
 """Pypetting."""
 
-from .pipette import *
-from .tips import *
-from .transfer import *
+from .liha import *
+from .mca import *
+from .roma import *
 from .incubate import *
 from .io import *

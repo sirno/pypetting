@@ -1,14 +1,11 @@
 """Pipetting functions."""
 
+import numpy as np
+
 from .utils import bin_to_dec, volumes_to_string, well_select, mca_well_select
+from .labware import labwares
 
 __all__ = ["aspirate", "dispense", "mix", "wash", "mca_aspirate", "mca_dispense"]
-
-labwares = {
-    "trough100": (8, 1),
-    "greiner96": (8, 12),
-    "greiner384": (16, 24),
-}
 
 
 def aspirate(
@@ -75,6 +72,18 @@ def wash(waste_volume, cleaner_volume, station):
         f"200,"
         f'"{str(cleaner_volume)}",'
         "10,70,30,0,0,1000,0);"
+    )
+
+
+def move_liha(grid, site, spacing=1, row=1, col=1, labware="greiner96"):
+    """Move LiHa to grid site."""
+    return (
+        "B;MoveLiha("
+        "255,"
+        f"{grid},"
+        f"{site},"
+        f"{spacing},"
+        f'"{well_select(np.array([1] * 8), row, col, *labwares[labware], spacing)}",'
     )
 
 

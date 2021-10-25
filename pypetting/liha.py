@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from .utils import bin_to_dec, volumes_to_string, well_select
+from .utils import bin_to_dec, volumes_to_string
 from .labware import labwares
 
 __all__ = ["aspirate", "dispense", "mix", "wash", "move_liha"]
@@ -23,7 +23,7 @@ def aspirate(
         f"{grid},"
         f"{site},"
         f"{spacing},"
-        f'"{well_select(volumes, row, col, spacing=spacing, **labwares[labware])}",'
+        f'"{_well_select(volumes, row, col, spacing=spacing, **labwares[labware])}",'
         "0,0);"
     )
 
@@ -43,7 +43,7 @@ def dispense(
         f"{grid},"
         f"{site},"
         f"{spacing},"
-        f'"{well_select(volumes, row, col, spacing=spacing, **labwares[labware])}",'
+        f'"{_well_select(volumes, row, col, spacing=spacing, **labwares[labware])}",'
         "0,0);"
     )
 
@@ -61,7 +61,7 @@ def mix(
         f"{grid},"
         f"{site},"
         f"{spacing},"
-        f'"{well_select(volumes, row, col, spacing=spacing, **labwares[labware])}",'
+        f'"{_well_select(volumes, row, col, spacing=spacing, **labwares[labware])}",'
         "0,0);"
     )
 
@@ -97,10 +97,33 @@ def move_liha(
         f"{grid},"
         f"{site},"
         f"{spacing},"
-        f'"{well_select(np.array([1] * 8), row, col, *labwares[labware], spacing)}",'
+        f'"{_well_select(np.array([1] * 8), row, col, *labwares[labware], spacing)}",'
         f"{local:#d},"
         f"{z_pos},"
         "0,"
         f"{speed},"
         "0,0);"
     )
+
+
+def _encode_well_select(volumes, offset, spacing):
+    encoder = np.zeros(offset + len(volumes) * spacing, dtype=np.int8)
+    for i, volume in enumerate(volumes):
+        encoder[offset + spacing * i] = 1 if volume > 0 else 0
+    splits = [encoder[(7 * i) : (7 * (i + 1))] for i in range((len(encoder) + 6) // 7)]
+    return [2 ** np.arange(len(split)) * split for split in splits]
+
+
+def _well_select(volumes, row, col, nrows, ncols, spacing, **kwargs):
+    """Generate well select string for volumes."""
+    well = (col - 1) * nrows + row - 1
+    encoders = _encode_well_select(volumes, well % 7, spacing)
+    n_chars = (nrows * ncols + 6) // 7
+    sequence = [
+        f"{ncols:02x}",
+        f"{nrows:02x}",
+        "0" * int(well / 7),
+        *[chr(sum(encoder) + 48) if sum(encoder) > 0 else "0" for encoder in encoders],
+        "0" * (n_chars - len(encoders) - int(well / 7)),
+    ]
+    return "".join(sequence)

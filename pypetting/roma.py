@@ -1,34 +1,42 @@
 """Transfer labware."""
 
+from dataclasses import dataclass
+
+
+@dataclass
+class GridSite:
+    """Specify a grid site."""
+
+    grid: int
+    site: int
+    carrier: str
+
 
 def transfer_labware(
-    src_grid,
-    src_site,
-    dest_grid,
-    dest_site,
-    rack_type,
-    lid_grid=0,
-    lid_site=0,
-    cover=False,
-    back_home=False,
+    src: GridSite,
+    dest: GridSite,
+    rack_type: str,
+    lid: GridSite = None,
+    cover: bool = False,
+    back_home: bool = False,
 ):
     """Transfer labware with RoMa."""
     return (
         "B;Transfer_Rack("
-        f'"{src_grid}",'
-        f'"{dest_grid}",'
+        f'"{src.grid}",'
+        f'"{dest.grid}",'
         f"{back_home:#d},"
-        f"{bool(lid_grid):#d},"
+        f"{bool(lid):#d},"
         "1,0,"
         f"{not cover:#d},"
-        f'"{lid_grid}",'
+        f'"{lid.grid}",'
         f'"{rack_type}",'
         '"Narrow",'
         '"","",'
-        '"StoreX 22Pos",'
-        '"MP 3Pos Fixed",'
-        '"MP 3Pos Fixed",'
-        f'"{src_site + 1}",'
-        f'"{lid_site + 1}",'
-        f'"{dest_site + 1}");'
+        f'"{src.carrier}",'
+        f'"{lid.carrier}",'
+        f'"{dest.carrier}",'
+        f'"{src.site + 1}",'
+        f'"{lid.site + 1}",'
+        f'"{dest.site + 1}");'
     )

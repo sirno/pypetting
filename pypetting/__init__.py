@@ -1,5 +1,6 @@
 """Pypetting."""
 
+from .base import *
 from .incubate import *
 from .io import *
 from .liha import *

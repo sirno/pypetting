@@ -1,19 +1,9 @@
 """Labware dimensions."""
 
+from .base import Labware
 
 labwares = {
-    "trough100": {
-        "nrows": 8,
-        "ncols": 1,
-    },
-    "greiner96": {
-        "nrows": 8,
-        "ncols": 12,
-        "mca_spacing": 1,
-    },
-    "greiner384": {
-        "nrows": 16,
-        "ncols": 24,
-        "mca_spacing": 2,
-    },
+    "trough100": Labware(8, 1),
+    "greiner96": Labware(8, 12),
+    "greiner384": Labware(16, 24, 2),
 }

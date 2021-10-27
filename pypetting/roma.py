@@ -1,15 +1,6 @@
 """Transfer labware."""
 
-from dataclasses import dataclass
-
-
-@dataclass
-class GridSite:
-    """Specify a grid site."""
-
-    grid: int
-    site: int
-    carrier: str
+from .base import GridSite
 
 
 def transfer_labware(

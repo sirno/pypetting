@@ -2,71 +2,115 @@
 
 import numpy as np
 
-from .utils import bin_to_dec, volumes_to_string
+from numpy.typing import ArrayLike
+
+from .base import GridSite, Labware
 from .labware import labwares
+from .utils import bin_to_dec, volumes_to_string
 
 __all__ = ["aspirate", "dispense", "mix", "wash", "move_liha"]
 
 
 def aspirate(
-    volumes, liquid_class, grid, site, spacing=1, row=1, col=1, labware="greiner96"
+    grid_site: GridSite,
+    column: int,
+    volumes: ArrayLike | int | float,
+    liquid_class: str,
+    spacing: int = 1,
+    tip_mask: ArrayLike | int = 255,
+    labware: Labware | str = "greiner96",
 ):
     """Advanced aspirate command."""
+
     if isinstance(volumes, int | float):
         volumes = np.array([volumes] * 8)
-    tip_select = bin_to_dec(volumes > 0)
+
+    if isinstance(tip_mask, ArrayLike):
+        tip_mask = bin_to_dec(tip_mask)
+
+    if isinstance(labware, str):
+        labware = labwares[labware]
+
     return (
         "B;Aspirate("
-        f"{tip_select},"
+        f"{tip_mask},"
         f'"{liquid_class}",'
         f"{volumes_to_string(volumes)},"
-        f"{grid},"
-        f"{site},"
+        f"{grid_site.grid},"
+        f"{grid_site.site},"
         f"{spacing},"
-        f'"{_well_select(volumes, row, col, spacing=spacing, **labwares[labware])}",'
+        f'"{_well_select(volumes, column, labware.rows, labware.cols)}",'
         "0,0);"
     )
 
 
 def dispense(
-    volumes, liquid_class, grid, site, spacing=1, row=1, col=1, labware="greiner96"
+    column: int,
+    volumes: ArrayLike | int | float,
+    liquid_class: str,
+    grid_site: GridSite,
+    spacing: int = 1,
+    tip_mask: ArrayLike | int = 255,
+    labware: Labware | str = "greiner96",
 ):
     """Advanced dispense command."""
+
     if isinstance(volumes, int | float):
         volumes = np.array([volumes] * 8)
-    tip_select = bin_to_dec(volumes > 0)
+
+    if isinstance(tip_mask, ArrayLike):
+        tip_mask = bin_to_dec(tip_mask)
+
+    if isinstance(labware, str):
+        labware = labwares[labware]
+
     return (
         "B;Dispense("
-        f"{tip_select},"
+        f"{tip_mask},"
         f'"{liquid_class}",'
         f"{volumes_to_string(volumes)},"
-        f"{grid},"
-        f"{site},"
+        f"{grid_site.grid},"
+        f"{grid_site.site},"
         f"{spacing},"
-        f'"{_well_select(volumes, row, col, spacing=spacing, **labwares[labware])}",'
+        f'"{_well_select(volumes, column, labware.rows, labware.cols)}",'
         "0,0);"
     )
 
 
 def mix(
-    volumes, liquid_class, grid, site, spacing=1, row=1, col=1, labware="greiner96"
+    column: int,
+    volumes: ArrayLike | int | float,
+    liquid_class: str,
+    grid_site: GridSite,
+    spacing: int = 1,
+    tip_mask: ArrayLike | int = 255,
+    labware: Labware | str = "greiner96",
 ):
     """Advanced mix command."""
-    tip_select = bin_to_dec(volumes > 0)
+
+    if isinstance(volumes, int | float):
+        volumes = np.array([volumes] * 8)
+
+    if isinstance(tip_mask, ArrayLike):
+        tip_mask = bin_to_dec(tip_mask)
+
+    if isinstance(labware, str):
+        labware = labwares[labware]
+
     return (
         "B;Mix("
-        f"{tip_select},"
+        f"{tip_mask},"
         f'"{liquid_class}",'
         f"{volumes_to_string(volumes)},"
-        f"{grid},"
-        f"{site},"
+        f"{grid_site.grid},"
+        f"{grid_site.site},"
         f"{spacing},"
-        f'"{_well_select(volumes, row, col, spacing=spacing, **labwares[labware])}",'
+        f'"{_well_select(volumes, column, labware.rows, labware.cols)}",'
         "0,0);"
     )
 
 
-def wash(waste_volume, cleaner_volume, station):
+def wash(waste_volume: int | float, cleaner_volume: int | float, station: int):
     """Wash tips command."""
     return (
         "B;Wash("
@@ -80,24 +124,30 @@ def wash(waste_volume, cleaner_volume, station):
 
 
 def move_liha(
-    grid,
-    site,
-    spacing=1,
-    row=1,
-    col=1,
-    labware="greiner96",
-    local=False,
-    z_pos=0,
-    speed=10,
+    grid_site: GridSite,
+    column: int,
+    positions: ArrayLike = None,
+    spacing: int = 1,
+    labware: Labware | str = "greiner96",
+    local: bool = False,
+    z_pos: int = 0,
+    speed: int = 10,
 ):
     """Move LiHa to grid site."""
+
+    if isinstance(labware, str):
+        labware = labwares[labware]
+
+    if positions is None:
+        positions = np.array([1] * 8)
+
     return (
         "B;MoveLiha("
         "255,"
-        f"{grid},"
-        f"{site},"
+        f"{grid_site.grid},"
+        f"{grid_site.site},"
         f"{spacing},"
-        f'"{_well_select(np.array([1] * 8), row, col, *labwares[labware], spacing)}",'
+        f'"{_well_select(positions, column, labware.rows, labware.cols)}",'
         f"{local:#d},"
         f"{z_pos},"
         "0,"
@@ -106,18 +156,18 @@ def move_liha(
     )
 
 
-def _encode_well_select(volumes, offset, spacing):
-    encoder = np.zeros(offset + len(volumes) * spacing, dtype=np.int8)
+def _encode_well_select(volumes, offset):
+    encoder = np.zeros(offset + len(volumes), dtype=np.int8)
     for i, volume in enumerate(volumes):
-        encoder[offset + spacing * i] = 1 if volume > 0 else 0
+        encoder[offset + i] = 1 if volume > 0 else 0
     splits = [encoder[(7 * i) : (7 * (i + 1))] for i in range((len(encoder) + 6) // 7)]
     return [2 ** np.arange(len(split)) * split for split in splits]
 
 
-def _well_select(volumes, row, col, nrows, ncols, spacing, **kwargs):
+def _well_select(volumes, column, nrows, ncols, **kwargs):
     """Generate well select string for volumes."""
-    well = (col - 1) * nrows + row - 1
-    encoders = _encode_well_select(volumes, well % 7, spacing)
+    well = (column - 1) * nrows
+    encoders = _encode_well_select(volumes, well % 7)
     n_chars = (nrows * ncols + 6) // 7
     sequence = [
         f"{ncols:02x}",

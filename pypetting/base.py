@@ -1,8 +1,10 @@
 """Base classes."""
 from dataclasses import dataclass
 
+from dataclasses_json import dataclass_json
 
-@dataclass
+
+@dataclass(frozen=True)
 class GridSite:
     """Specify a grid site."""
 
@@ -11,6 +13,7 @@ class GridSite:
     carrier: str
 
 
+@dataclass_json
 @dataclass
 class GridStash:
     """Specify a stash."""
@@ -31,7 +34,7 @@ class GridStash:
         return GridSite(self.grid, self.elements + 1, self.carrier)
 
 
-@dataclass
+@dataclass(frozen=True)
 class Labware:
     """Labware specification."""
 

@@ -25,7 +25,9 @@ def aspirate(
     if isinstance(volumes, int | float):
         volumes = np.array([volumes] * 8)
 
-    pipette_volumes = volumes_to_string(volumes[volumes > 0] if spacing > 1 else volumes)
+    pipette_volumes = volumes_to_string(
+        volumes[volumes > 0] if spacing > 1 else volumes
+    )
 
     if not isinstance(tip_mask, int | float):
         tip_mask = bin_to_dec(tip_mask)
@@ -37,7 +39,7 @@ def aspirate(
         "B;Aspirate("
         f"{tip_mask},"
         f'"{liquid_class}",'
-        f"{volumes_to_string(volumes)},"
+        f"{pipette_volumes},"
         f"{grid_site.grid},"
         f"{grid_site.site},"
         f"{spacing},"
@@ -60,7 +62,9 @@ def dispense(
     if isinstance(volumes, int | float):
         volumes = np.array([volumes] * 8)
 
-    pipette_volumes = volumes_to_string(volumes[volumes > 0] if spacing > 1 else volumes)
+    pipette_volumes = volumes_to_string(
+        volumes[volumes > 0] if spacing > 1 else volumes
+    )
 
     if not isinstance(tip_mask, int | float):
         tip_mask = bin_to_dec(tip_mask)
@@ -95,7 +99,9 @@ def mix(
     if isinstance(volumes, int | float):
         volumes = np.array([volumes] * 8)
 
-    pipette_volumes = volumes_to_string(volumes[volumes > 0] if spacing > 1 else volumes)
+    pipette_volumes = volumes_to_string(
+        volumes[volumes > 0] if spacing > 1 else volumes
+    )
 
     if not isinstance(tip_mask, int | float):
         tip_mask = bin_to_dec(tip_mask)
@@ -107,7 +113,7 @@ def mix(
         "B;Mix("
         f"{tip_mask},"
         f'"{liquid_class}",'
-        f"{volumes_to_string(volumes)},"
+        f"{pipette_volumes},"
         f"{grid_site.grid},"
         f"{grid_site.site},"
         f"{spacing},"

@@ -26,12 +26,12 @@ class GridStash:
     def push(self) -> GridSite:
         """Add element to stash."""
         self.elements += 1
-        return GridSite(self.grid, self.elements, self.carrier)
+        return GridSite(self.grid, self.elements, self.carrier) - 1
 
     def pop(self) -> GridSite:
         """Remove element from stash."""
         self.elements -= 1
-        return GridSite(self.grid, self.elements + 1, self.carrier)
+        return GridSite(self.grid, self.elements, self.carrier)
 
 
 @dataclass(frozen=True)

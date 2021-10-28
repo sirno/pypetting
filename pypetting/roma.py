@@ -17,9 +17,6 @@ def transfer_labware(
     if isinstance(labware, str):
         labware = labwares[labware]
 
-    if lid is None:
-        lid = GridSite(0, 0, "")
-
     return (
         "B;Transfer_Rack("
         f'"{src.grid}",'
@@ -28,14 +25,14 @@ def transfer_labware(
         f"{bool(lid):#d},"
         "1,0,"
         f"{not cover:#d},"
-        f'"{lid.grid}",'
+        f'"{lid.grid if lid is not None else ""}",'
         f'"{labware.name}",'
         '"Narrow",'
         '"","",'
         f'"{src.carrier}",'
-        f'"{lid.carrier}",'
+        f'"{lid.carrier if lid is not None else ""}",'
         f'"{dest.carrier}",'
         f'"{src.site + 1}",'
-        f'"{lid.site + 1}",'
+        f'"{lid.site + 1 if lid is not None else ""}",'
         f'"{dest.site + 1}");'
     )

@@ -8,7 +8,7 @@ from .labware import labwares
 def transfer_labware(
     src: GridSite,
     dest: GridSite,
-    labware: str,
+    labware: Labware | str,
     lid: GridSite = None,
     cover: bool = False,
     back_home: bool = False,

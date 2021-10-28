@@ -22,29 +22,15 @@ def aspirate(
 ):
     """Advanced aspirate command."""
 
-    if isinstance(volumes, int | float):
-        volumes = np.array([volumes] * 8)
-
-    pipette_volumes = volumes_to_string(
-        volumes[volumes > 0] if spacing > 1 else volumes
-    )
-
-    if not isinstance(tip_mask, int | float):
-        tip_mask = bin_to_dec(tip_mask)
-
-    if isinstance(labware, str):
-        labware = labwares[labware]
-
-    return (
-        "B;Aspirate("
-        f"{tip_mask},"
-        f'"{liquid_class}",'
-        f"{pipette_volumes},"
-        f"{grid_site.grid},"
-        f"{grid_site.site},"
-        f"{spacing},"
-        f'"{_well_select(volumes, column, labware.rows, labware.cols)}",'
-        "0,0);"
+    return _liha_command(
+        cmd="Aspirate",
+        grid_site=grid_site,
+        column=column,
+        volumes=volumes,
+        liquid_class=liquid_class,
+        spacing=spacing,
+        tip_mask=tip_mask,
+        labware=labware,
     )
 
 
@@ -59,29 +45,15 @@ def dispense(
 ):
     """Advanced dispense command."""
 
-    if isinstance(volumes, int | float):
-        volumes = np.array([volumes] * 8)
-
-    pipette_volumes = volumes_to_string(
-        volumes[volumes > 0] if spacing > 1 else volumes
-    )
-
-    if not isinstance(tip_mask, int | float):
-        tip_mask = bin_to_dec(tip_mask)
-
-    if isinstance(labware, str):
-        labware = labwares[labware]
-
-    return (
-        "B;Dispense("
-        f"{tip_mask},"
-        f'"{liquid_class}",'
-        f"{pipette_volumes},"
-        f"{grid_site.grid},"
-        f"{grid_site.site},"
-        f"{spacing},"
-        f'"{_well_select(volumes, column, labware.rows, labware.cols)}",'
-        "0,0);"
+    return _liha_command(
+        cmd="Dispense",
+        grid_site=grid_site,
+        column=column,
+        volumes=volumes,
+        liquid_class=liquid_class,
+        spacing=spacing,
+        tip_mask=tip_mask,
+        labware=labware,
     )
 
 
@@ -96,29 +68,15 @@ def mix(
 ):
     """Advanced mix command."""
 
-    if isinstance(volumes, int | float):
-        volumes = np.array([volumes] * 8)
-
-    pipette_volumes = volumes_to_string(
-        volumes[volumes > 0] if spacing > 1 else volumes
-    )
-
-    if not isinstance(tip_mask, int | float):
-        tip_mask = bin_to_dec(tip_mask)
-
-    if isinstance(labware, str):
-        labware = labwares[labware]
-
-    return (
-        "B;Mix("
-        f"{tip_mask},"
-        f'"{liquid_class}",'
-        f"{pipette_volumes},"
-        f"{grid_site.grid},"
-        f"{grid_site.site},"
-        f"{spacing},"
-        f'"{_well_select(volumes, column, labware.rows, labware.cols)}",'
-        "0,0);"
+    return _liha_command(
+        cmd="Mix",
+        grid_site=grid_site,
+        column=column,
+        volumes=volumes,
+        liquid_class=liquid_class,
+        spacing=spacing,
+        tip_mask=tip_mask,
+        labware=labware,
     )
 
 
@@ -132,7 +90,7 @@ def wash(waste_volume: int | float, cleaner_volume: int | float, station: int):
         f"500,"
         f'"{cleaner_volume}",'
         "0,10,70,30,0,0,1000,0);"
-    )
+    ).encode()
 
 
 def move_liha(
@@ -165,7 +123,7 @@ def move_liha(
         "0,"
         f"{speed},"
         "0,0);"
-    )
+    ).encode()
 
 
 def _encode_well_select(volumes, offset):
@@ -182,10 +140,53 @@ def _well_select(volumes, column, nrows, ncols, **kwargs):
     encoders = _encode_well_select(volumes, well % 7)
     n_chars = (nrows * ncols + 6) // 7
     sequence = [
-        f"{ncols:02x}",
-        f"{nrows:02x}",
-        "0" * int(well / 7),
-        *[chr(sum(encoder) + 48) if sum(encoder) > 0 else "0" for encoder in encoders],
-        "0" * (n_chars - len(encoders) - int(well / 7)),
+        f"{ncols:02x}".encode(),
+        f"{nrows:02x}".encode(),
+        b"0" * int(well / 7),
+        *[
+            int(sum(encoder) + 48).to_bytes(1, "big") if sum(encoder) > 0 else b"0"
+            for encoder in encoders
+        ],
+        b"0" * (n_chars - len(encoders) - int(well / 7)),
     ]
-    return "".join(sequence)
+    return b"".join(sequence)
+
+
+def _liha_command(
+    cmd: str,
+    grid_site: GridSite,
+    column: int,
+    volumes: ArrayLike | int | float,
+    liquid_class: str,
+    spacing: int = 1,
+    tip_mask: ArrayLike | int = 255,
+    labware: Labware | str = "greiner96",
+):
+
+    if isinstance(volumes, int | float):
+        volumes = np.array([volumes] * 8)
+
+    pipette_volumes = volumes_to_string(
+        volumes[volumes > 0] if spacing > 1 else volumes
+    )
+
+    if not isinstance(tip_mask, int | float):
+        tip_mask = bin_to_dec(tip_mask)
+
+    if isinstance(labware, str):
+        labware = labwares[labware]
+
+    command = (
+        (
+            f"B;{cmd}("
+            f"{tip_mask},"
+            f'"{liquid_class}",'
+            f"{pipette_volumes},"
+            f"{grid_site.grid},"
+            f"{grid_site.site},"
+            f"{spacing},"
+        ).encode()
+        + _well_select(volumes, column, labware.rows, labware.cols)
+        + b",0,0);"
+    )
+    return command

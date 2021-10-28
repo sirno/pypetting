@@ -35,4 +35,4 @@ def transfer_labware(
         f'"{src.site + 1}",'
         f'"{lid.site + 1 if lid is not None else ""}",'
         f'"{dest.site + 1}");'
-    )
+    ).encode()

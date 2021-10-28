@@ -27,7 +27,7 @@ def mca_aspirate(
         f"{grid_site.site},"
         f'"{_mca_well_select(row, col, labware)}",'
         "0,0);"
-    )
+    ).encode()
 
 
 def mca_dispense(
@@ -51,7 +51,7 @@ def mca_dispense(
         f"{grid_site.site},"
         f'"{_mca_well_select(row, col, labware)}",'
         "0,0);"
-    )
+    ).encode()
 
 
 def mca_mix(
@@ -75,17 +75,17 @@ def mca_mix(
         f"{grid_site.site},"
         f'"{_mca_well_select(row, col, labware)}",'
         "0,0);"
-    )
+    ).encode()
 
 
 def mca_get_tips(grid_site: GridSite, airgap: int = 20):
     """Get tips for mca."""
-    return f"B;MCAGetDitis({grid_site.grid},{grid_site.site},{airgap},96,0,0);"
+    return f"B;MCAGetDitis({grid_site.grid},{grid_site.site},{airgap},96,0,0);".encode()
 
 
 def mca_drop_tips(grid_site: GridSite, waste_site=0):
     """Drop tips for mca."""
-    return f"B;MCADropDitis({grid_site.grid},{grid_site.site},1,{waste_site},0,0);"
+    return f"B;MCADropDitis({grid_site.grid},{grid_site.site},1,{waste_site},0,0);".encode()
 
 
 def _mca_well_select(row: int, col: int, labware: Labware):
@@ -102,12 +102,12 @@ def _mca_well_select(row: int, col: int, labware: Labware):
         encoder = 2 ** np.arange(enc) * np.array(
             list(map(_use_well, np.arange(enc) + well))
         )
-        return chr(sum(encoder) + 48) if sum(encoder) > 0 else "0"
+        return int(sum(encoder) + 48).to_bytes(1, "big") if sum(encoder) > 0 else b"0"
 
     nwells = labware.rows * labware.cols
     sequence = [
-        f"{labware.cols:02x}{labware.rows:02x}",
+        f"{labware.cols:02x}{labware.rows:02x}".encode(),
         *map(_encode_mca_well_select, np.arange(0, nwells - 6, step=7)),
         _encode_mca_well_select(nwells - nwells % 7, enc=nwells % 7),
     ]
-    return "".join(sequence)
+    return b"".join(sequence)

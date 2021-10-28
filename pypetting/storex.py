@@ -44,6 +44,6 @@ def _facts_store_x(command, parameter, needs_labware, allowed_labware):
     """facts for storeX"""
     return (
         facts("StoreX", command, parameter, needs_labware, allowed_labware)
-        + "\n"
+        + b"\n"
         + _end_access()
     )

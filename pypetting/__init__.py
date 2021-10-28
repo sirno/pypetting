@@ -1,7 +1,7 @@
 """Pypetting."""
 
 from .base import *
-from .incubate import *
+from .storex import *
 from .io import *
 from .liha import *
 from .mca import *

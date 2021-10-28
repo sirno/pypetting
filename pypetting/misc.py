@@ -19,3 +19,16 @@ def start_timer(index):
 def wait_timer(index, time):
     """Wait for timer."""
     return f'B;WaitTimer("{index}","{time}");'
+
+
+def facts(device, command, parameter, needs_labware, allowed_labware):
+    """General FACTS command"""
+    return (
+        "B;FACTS("
+        f'"{device}",'
+        f'"{command}",'
+        f'"{parameter}",'
+        f'"{needs_labware}",'
+        f'"{allowed_labware}",'
+        ");"
+    )

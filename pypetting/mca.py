@@ -2,8 +2,6 @@
 
 import numpy as np
 
-from numpy.typing import ArrayLike
-
 from .base import GridSite, Labware
 from .labware import labwares
 
@@ -12,7 +10,7 @@ def mca_aspirate(
     grid_site: GridSite,
     row: int,
     col: int,
-    volume: ArrayLike,
+    volume: int | float,
     liquid_class: str,
     labware: Labware | str = "greiner96",
 ):
@@ -36,7 +34,7 @@ def mca_dispense(
     grid_site: GridSite,
     row: int,
     col: int,
-    volume: ArrayLike,
+    volume: int | float,
     liquid_class: str,
     labware: Labware | str = "greiner96",
 ):
@@ -60,7 +58,7 @@ def mca_mix(
     grid_site: GridSite,
     row: int,
     col: int,
-    volume: ArrayLike,
+    volume: int | float,
     liquid_class: str,
     labware: Labware | str = "greiner96",
 ):

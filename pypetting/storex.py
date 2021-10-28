@@ -22,7 +22,7 @@ def present_plate(cartridge, position, labware):
 
 def return_plate(cartridge, position):
     """Present plate"""
-    return _facts_store_x("StoreX_ReturnPlate", f"{cartridge},{position}", "1", "")
+    return _facts_store_x("StoreX_ReturnPlate", f"{cartridge},{position}", "0, "")
 
 
 def present_plate_by_bc(bc_file_path, bc_file_line, labware):

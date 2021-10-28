@@ -35,6 +35,7 @@ class GridStash:
 class Labware:
     """Labware specification."""
 
+    name: str
     rows: int
     cols: int
     spacing: int = 1

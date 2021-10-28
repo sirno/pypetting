@@ -1,17 +1,22 @@
 """Transfer labware."""
 
-from .base import GridSite
+from .base import GridSite, Labware
+
+from .labware import labwares
 
 
 def transfer_labware(
     src: GridSite,
     dest: GridSite,
-    rack_type: str,
+    labware: str,
     lid: GridSite = None,
     cover: bool = False,
     back_home: bool = False,
 ):
     """Transfer labware with RoMa."""
+    if isinstance(labware, str):
+        labware = labwares[labware]
+
     return (
         "B;Transfer_Rack("
         f'"{src.grid}",'
@@ -21,7 +26,7 @@ def transfer_labware(
         "1,0,"
         f"{not cover:#d},"
         f'"{lid.grid}",'
-        f'"{rack_type}",'
+        f'"{labware.name}",'
         '"Narrow",'
         '"","",'
         f'"{src.carrier}",'

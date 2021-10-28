@@ -25,7 +25,7 @@ def aspirate(
     if isinstance(volumes, int | float):
         volumes = np.array([volumes] * 8)
 
-    if isinstance(tip_mask, ArrayLike):
+    if not isinstance(tip_mask, int | float):
         tip_mask = bin_to_dec(tip_mask)
 
     if isinstance(labware, str):
@@ -58,7 +58,7 @@ def dispense(
     if isinstance(volumes, int | float):
         volumes = np.array([volumes] * 8)
 
-    if isinstance(tip_mask, ArrayLike):
+    if not isinstance(tip_mask, int | float):
         tip_mask = bin_to_dec(tip_mask)
 
     if isinstance(labware, str):
@@ -91,7 +91,7 @@ def mix(
     if isinstance(volumes, int | float):
         volumes = np.array([volumes] * 8)
 
-    if isinstance(tip_mask, ArrayLike):
+    if not isinstance(tip_mask, int | float):
         tip_mask = bin_to_dec(tip_mask)
 
     if isinstance(labware, str):

@@ -17,6 +17,9 @@ def transfer_labware(
     if isinstance(labware, str):
         labware = labwares[labware]
 
+    if lid is None:
+        lid = GridSite(0, 0, "")
+
     return (
         "B;Transfer_Rack("
         f'"{src.grid}",'

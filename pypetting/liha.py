@@ -45,10 +45,10 @@ def aspirate(
 
 
 def dispense(
+    grid_site: GridSite,
     column: int,
     volumes: ArrayLike | int | float,
     liquid_class: str,
-    grid_site: GridSite,
     spacing: int = 1,
     tip_mask: ArrayLike | int = 255,
     labware: Labware | str = "greiner96",
@@ -78,10 +78,10 @@ def dispense(
 
 
 def mix(
+    grid_site: GridSite,
     column: int,
     volumes: ArrayLike | int | float,
     liquid_class: str,
-    grid_site: GridSite,
     spacing: int = 1,
     tip_mask: ArrayLike | int = 255,
     labware: Labware | str = "greiner96",

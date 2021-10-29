@@ -15,23 +15,45 @@ class GridSite:
 
 @dataclass_json
 @dataclass
-class GridStash:
+class GridStack:
     """Specify a stash."""
 
     grid: int
-    elements: int
+    size: int
     capacity: int
     carrier: str
 
     def push(self) -> GridSite:
         """Add element to stash."""
-        self.elements += 1
-        return GridSite(self.grid, self.elements - 1, self.carrier)
+        self.size += 1
+        return GridSite(self.grid, self.size - 1, self.carrier)
 
     def pop(self) -> GridSite:
         """Remove element from stash."""
-        self.elements -= 1
-        return GridSite(self.grid, self.elements, self.carrier)
+        self.size -= 1
+        return GridSite(self.grid, self.size, self.carrier)
+
+
+@dataclass_json
+@dataclass
+class GridQueue:
+    """Specify a stash."""
+
+    grid: int
+    first: int
+    last: int
+    capacity: int
+    carrier: str
+
+    def push(self) -> GridSite:
+        """Add element to queue."""
+        self.last += 1
+        return GridSite(self.grid, self.last - 1, self.carrier)
+
+    def pop(self) -> GridSite:
+        """Get element from queue."""
+        self.first += 1
+        return GridSite(self.grid, self.first - 1, self.carrier)
 
 
 @dataclass(frozen=True)

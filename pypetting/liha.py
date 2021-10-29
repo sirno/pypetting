@@ -14,10 +14,10 @@ __all__ = ["aspirate", "dispense", "mix", "wash", "move_liha"]
 def aspirate(
     grid_site: GridSite,
     column: int,
+    column_mask: ArrayLike,
     volumes: ArrayLike | int | float,
     liquid_class: str,
     spacing: int = 1,
-    tip_mask: ArrayLike | int = 255,
     labware: Labware | str = "greiner96",
 ):
     """Advanced aspirate command."""
@@ -26,10 +26,10 @@ def aspirate(
         cmd="Aspirate",
         grid_site=grid_site,
         column=column,
+        column_mask=column_mask,
         volumes=volumes,
         liquid_class=liquid_class,
         spacing=spacing,
-        tip_mask=tip_mask,
         labware=labware,
     )
 
@@ -37,10 +37,10 @@ def aspirate(
 def dispense(
     grid_site: GridSite,
     column: int,
+    column_mask: ArrayLike,
     volumes: ArrayLike | int | float,
     liquid_class: str,
     spacing: int = 1,
-    tip_mask: ArrayLike | int = 255,
     labware: Labware | str = "greiner96",
 ):
     """Advanced dispense command."""
@@ -49,10 +49,10 @@ def dispense(
         cmd="Dispense",
         grid_site=grid_site,
         column=column,
+        column_mask=column_mask,
         volumes=volumes,
         liquid_class=liquid_class,
         spacing=spacing,
-        tip_mask=tip_mask,
         labware=labware,
     )
 
@@ -60,10 +60,10 @@ def dispense(
 def mix(
     grid_site: GridSite,
     column: int,
+    column_mask: ArrayLike,
     volumes: ArrayLike | int | float,
     liquid_class: str,
     spacing: int = 1,
-    tip_mask: ArrayLike | int = 255,
     labware: Labware | str = "greiner96",
 ):
     """Advanced mix command."""
@@ -72,10 +72,10 @@ def mix(
         cmd="Mix",
         grid_site=grid_site,
         column=column,
+        column_mask=column_mask,
         volumes=volumes,
         liquid_class=liquid_class,
         spacing=spacing,
-        tip_mask=tip_mask,
         labware=labware,
     )
 
@@ -156,10 +156,10 @@ def _liha_command(
     cmd: str,
     grid_site: GridSite,
     column: int,
+    column_mask: ArrayLike,
     volumes: ArrayLike | int | float,
     liquid_class: str,
     spacing: int = 1,
-    tip_mask: ArrayLike | int = 255,
     labware: Labware | str = "greiner96",
 ):
 
@@ -170,23 +170,20 @@ def _liha_command(
         volumes[volumes > 0] if spacing > 1 else volumes
     )
 
-    if not isinstance(tip_mask, int | float):
-        tip_mask = bin_to_dec(tip_mask)
-
     if isinstance(labware, str):
         labware = labwares[labware]
 
     command = (
         (
             f"B;{cmd}("
-            f"{tip_mask},"
+            f"{bin_to_dec(volumes)},"
             f'"{liquid_class}",'
             f"{pipette_volumes},"
             f"{grid_site.grid},"
             f"{grid_site.site},"
             f"{spacing},"
         ).encode()
-        + _well_select(volumes, column, labware.rows, labware.cols)
+        + _well_select(column_mask, column, labware.rows, labware.cols)
         + b",0,0);"
     )
     return command

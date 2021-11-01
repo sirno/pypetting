@@ -19,9 +19,9 @@ class GridStack:
     """Specify a stash."""
 
     grid: int
-    size: int
     capacity: int
     carrier: str
+    size: int = 0
 
     def push(self) -> GridSite:
         """Add element to stash."""
@@ -40,10 +40,10 @@ class GridQueue:
     """Specify a stash."""
 
     grid: int
-    first: int
-    last: int
     capacity: int
     carrier: str
+    first: int = 0
+    last: int = 0
 
     def push(self) -> GridSite:
         """Add element to queue."""
@@ -54,6 +54,11 @@ class GridQueue:
         """Get element from queue."""
         self.first += 1
         return GridSite(self.grid, self.first - 1, self.carrier)
+
+    @property
+    def size(self) -> int:
+        """Number of elements in the queue."""
+        return self.last - self.first
 
 
 @dataclass(frozen=True)

@@ -166,10 +166,6 @@ def _liha_command(
     if isinstance(volumes, int | float):
         volumes = np.array([volumes] * 8)
 
-    pipette_volumes = volumes_to_string(
-        volumes[volumes > 0] if spacing > 1 else volumes
-    )
-
     if isinstance(labware, str):
         labware = labwares[labware]
 
@@ -178,7 +174,7 @@ def _liha_command(
             f"B;{cmd}("
             f"{bin_to_dec(volumes)},"
             f'"{liquid_class}",'
-            f"{pipette_volumes},"
+            f"{volumes_to_string(volumes)},"
             f"{grid_site.grid},"
             f"{grid_site.site},"
             f"{spacing},"

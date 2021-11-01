@@ -177,9 +177,9 @@ def _liha_command(
             f"{volumes_to_string(volumes)},"
             f"{grid_site.grid},"
             f"{grid_site.site},"
-            f"{spacing},"
+            f'{spacing},"'
         ).encode()
         + _well_select(column_mask, column, labware.rows, labware.cols)
-        + b",0,0);"
+        + b'",0,0);'
     )
     return command

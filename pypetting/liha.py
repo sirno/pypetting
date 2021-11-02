@@ -109,42 +109,42 @@ def move_liha(
         labware = labwares[labware]
 
     if positions is None:
-        positions = np.array([1] * 8)
+        positions = np.array([True] * 8)
 
-    return (
-        "B;MoveLiha("
-        "255,"
-        f"{grid_site.grid},"
-        f"{grid_site.site},"
-        f"{spacing},"
-        f'"{_well_select(positions, column, labware.rows, labware.cols)}",'
-        f"{local:#d},"
-        f"{z_pos},"
-        "0,"
-        f"{speed},"
-        "0,0);"
-    ).encode()
+    command = (
+        (
+            "B;MoveLiha("
+            "255,"
+            f"{grid_site.grid},"
+            f"{grid_site.site},"
+            f'{spacing},"'
+        ).encode()
+        + _well_select(positions, column, labware.rows, labware.cols)
+        + (f'",{local:#d},{z_pos},0,{speed},0,0);').encode()
+    )
+
+    return command
 
 
-def _encode_well_select(volumes, offset):
-    encoder = np.zeros(offset + len(volumes), dtype=np.int8)
-    for i, volume in enumerate(volumes):
+def _encode_well_select(column_mask, offset):
+    encoder = np.zeros(offset + len(column_mask), dtype=np.int8)
+    for i, volume in enumerate(column_mask):
         encoder[offset + i] = 1 if volume > 0 else 0
     splits = [encoder[(7 * i) : (7 * (i + 1))] for i in range((len(encoder) + 6) // 7)]
     return [2 ** np.arange(len(split)) * split for split in splits]
 
 
-def _well_select(volumes, column, nrows, ncols, **kwargs):
+def _well_select(column_mask, column, nrows, ncols, **kwargs):
     """Generate well select string for volumes."""
     well = (column - 1) * nrows
-    encoders = _encode_well_select(volumes, well % 7)
+    encoders = _encode_well_select(column_mask, well % 7)
     n_chars = (nrows * ncols + 6) // 7
     sequence = [
         f"{ncols:02x}".encode(),
         f"{nrows:02x}".encode(),
         b"0" * int(well / 7),
         *[
-            int(sum(encoder) + 48).to_bytes(1, "big") if sum(encoder) > 0 else b"0"
+            int(sum(encoder) + 48).to_bytes(1, "little") if sum(encoder) > 0 else b"0"
             for encoder in encoders
         ],
         b"0" * (n_chars - len(encoders) - int(well / 7)),

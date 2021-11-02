@@ -19,15 +19,19 @@ def mca_aspirate(
     if isinstance(labware, str):
         labware = labwares[labware]
 
-    return (
-        "B;MCAAspirate("
-        f'"{liquid_class}",'
-        f"{volume},"
-        f"{grid_site.grid},"
-        f"{grid_site.site},"
-        f'"{_mca_well_select(row, col, labware)}",'
-        "0,0);"
-    ).encode()
+    command = (
+        (
+            "B;MCAAspirate("
+            f'"{liquid_class}",'
+            f"{volume},"
+            f"{grid_site.grid},"
+            f'{grid_site.site},"'
+        ).encode()
+        + _mca_well_select(row, col, labware)
+        + b'",0,0);'
+    )
+
+    return command
 
 
 def mca_dispense(
@@ -43,15 +47,19 @@ def mca_dispense(
     if isinstance(labware, str):
         labware = labwares[labware]
 
-    return (
-        "B;MCADispense("
-        f'"{liquid_class}",'
-        f"{volume},"
-        f"{grid_site.grid},"
-        f"{grid_site.site},"
-        f'"{_mca_well_select(row, col, labware)}",'
-        "0,0);"
-    ).encode()
+    command = (
+        (
+            "B;MCADispense("
+            f'"{liquid_class}",'
+            f"{volume},"
+            f"{grid_site.grid},"
+            f'{grid_site.site},"'
+        ).encode()
+        + _mca_well_select(row, col, labware)
+        + b'",0,0);'
+    )
+
+    return command
 
 
 def mca_mix(
@@ -67,15 +75,19 @@ def mca_mix(
     if isinstance(labware, str):
         labware = labwares[labware]
 
-    return (
-        "B;MCAMix("
-        f'"{liquid_class}",'
-        f"{volume},"
-        f"{grid_site.grid},"
-        f"{grid_site.site},"
-        f'"{_mca_well_select(row, col, labware)}",'
-        "0,0);"
-    ).encode()
+    command = (
+        (
+            "B;MCAMix("
+            f'"{liquid_class}",'
+            f"{volume},"
+            f"{grid_site.grid},"
+            f'{grid_site.site},"'
+        ).encode()
+        + _mca_well_select(row, col, labware)
+        + b'",0,0);'
+    )
+
+    return command
 
 
 def mca_get_tips(grid_site: GridSite, airgap: int = 20):

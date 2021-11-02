@@ -1,6 +1,7 @@
 """FACTS commands, specifically for StoreX incubator"""
 
 from .misc import facts
+from .labware import labwares
 
 
 def read_all_barcodes():
@@ -15,7 +16,9 @@ def read_plates_in_cartridge(cartridge):
 
 def present_plate(cartridge, position, labware):
     """Present plate"""
-    return _facts_store_x("StoreX_PresentPlate", f"{cartridge},{position}", 1, labware)
+    return _facts_store_x(
+        "StoreX_PresentPlate", f"{cartridge},{position}", 1, labwares[labware].name
+    )
 
 
 def return_plate(cartridge, position):
@@ -26,7 +29,10 @@ def return_plate(cartridge, position):
 def present_plate_by_bc(bc_file_path, bc_file_line, labware):
     """Present plate by barcode from file"""
     return _facts_store_x(
-        "StoreX_PresentPlateByBarcode", f"{bc_file_line},{bc_file_path}", 1, labware
+        "StoreX_PresentPlateByBarcode",
+        f"{bc_file_line},{bc_file_path}",
+        1,
+        labwares[labware].name,
     )
 
 

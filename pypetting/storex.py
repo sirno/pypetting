@@ -3,6 +3,15 @@
 from .misc import facts
 from .labware import labwares
 
+__all__ = [
+    "read_all_barcodes",
+    "read_plates_in_cartridge",
+    "present_plate",
+    "present_plate_by_bc",
+    "return_plate",
+    "return_plate_by_bc",
+]
+
 
 def read_all_barcodes():
     """Read all barcodes in StoreX"""

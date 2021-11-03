@@ -8,7 +8,13 @@ from .base import GridSite, Labware
 from .labware import labwares
 from .utils import bin_to_dec, volumes_to_string
 
-__all__ = ["aspirate", "dispense", "mix", "wash", "move_liha"]
+__all__ = [
+    "aspirate",
+    "dispense",
+    "mix",
+    "wash",
+    "move_liha",
+]
 
 
 def aspirate(

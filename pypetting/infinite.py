@@ -2,6 +2,12 @@
 
 from .misc import facts
 
+__all__ = [
+    "open_infinite_reader",
+    "close_infinite_reader",
+    "measure_infinite_reader",
+]
+
 
 def open_infinite_reader():
     """Open infinite reader."""

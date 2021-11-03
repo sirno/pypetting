@@ -4,6 +4,8 @@ from .base import GridSite, Labware
 
 from .labware import labwares
 
+__all__ = ["transfer_labware"]
+
 
 def transfer_labware(
     src: GridSite,

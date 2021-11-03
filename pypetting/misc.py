@@ -1,5 +1,14 @@
 """Miscellaneous commands."""
 
+__all__ = [
+    "comment",
+    "user_prompt",
+    "set_variable",
+    "start_timer",
+    "wait_timer",
+    "facts",
+]
+
 
 def comment(msg):
     """Write comment."""

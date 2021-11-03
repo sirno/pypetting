@@ -1,5 +1,7 @@
 """Write work lists."""
 
+__all__ = ["write_gwl"]
+
 
 def write_gwl(path, gwl):
     """Write a gwl file."""

@@ -1,7 +1,29 @@
 """Base classes."""
 from dataclasses import dataclass
 
-from dataclasses_json import dataclass_json
+from dataclasses_json import DataClassJsonMixin
+
+__all__ = [
+    "GridSite",
+    "GridStack",
+    "GridQueue",
+    "Labware",
+]
+
+
+class _DataClassCached(DataClassJsonMixin):
+    """Wrapper class to add file writing to dataclass json serde."""
+
+    def write_to_file(self, path):
+        """Write dataclass to file."""
+        with open(path, "w", encoding="utf8") as file_descriptor:
+            file_descriptor.write(self.to_json())
+
+    @classmethod
+    def load_from_file(cls, path):
+        """Load dataclass from file."""
+        with open(path, "r", encoding="utf8") as file_descriptor:
+            return cls.from_json(file_descriptor.read())
 
 
 @dataclass(frozen=True)
@@ -13,9 +35,8 @@ class GridSite:
     carrier: str
 
 
-@dataclass_json
 @dataclass
-class GridStack:
+class GridStack(_DataClassCached):
     """Specify a stash."""
 
     grid: int
@@ -34,10 +55,9 @@ class GridStack:
         return GridSite(self.grid, self.size, self.carrier)
 
 
-@dataclass_json
 @dataclass
-class GridQueue:
-    """Specify a stash."""
+class GridQueue(_DataClassCached):
+    """Round robin queue."""
 
     grid: int
     capacity: int
@@ -47,18 +67,21 @@ class GridQueue:
 
     def push(self) -> GridSite:
         """Add element to queue."""
-        self.last += 1
+        self.last = (self.last + 1) % self.capacity
         return GridSite(self.grid, self.last - 1, self.carrier)
 
     def pop(self) -> GridSite:
         """Get element from queue."""
-        self.first += 1
+        self.first = (self.first + 1) % self.capacity
         return GridSite(self.grid, self.first - 1, self.carrier)
 
     @property
     def size(self) -> int:
         """Number of elements in the queue."""
-        return self.last - self.first
+        size = self.last - self.first
+        if size < 0:
+            size = size + self.capacity
+        return size
 
 
 @dataclass(frozen=True)

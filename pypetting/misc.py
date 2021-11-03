@@ -22,7 +22,7 @@ def user_prompt(msg, sound=0, timeout=-1):
 
 def set_variable(name, value):
     """Set a variable."""
-    return f'B;Variable({name},"{value}",0,"",0,1.000000,10.000000,0,0,0,0);'.encode()
+    return f'B;Variable({name},"{value}",0,"",0,1.000000,10.000000,0,2,0,0);'.encode()
 
 
 def start_timer(index):

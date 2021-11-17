@@ -2,7 +2,7 @@
 
 from .base import *
 from .infinite import *
-from .io import *
+from .write import *
 from .liha import *
 from .mca import *
 from .misc import *

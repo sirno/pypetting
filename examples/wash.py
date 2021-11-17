@@ -17,7 +17,7 @@ def phage_wash():
 
     bleach = "sterileWash_N_bleach"
     water = "sterileWash_N_H2O"
-    ethanol = "sterileWash_N_EtOH"
+    etoh = "sterileWash_N_EtOH"
 
     return [
         wash(1, 0.1, 32),
@@ -31,9 +31,9 @@ def phage_wash():
         dispense(h2o1, 1, COL96, 300 * ALL_TIPS, water, labware="trough100"),
         aspirate(h2o1, 1, COL96, 300 * ALL_TIPS, water, labware="trough100"),
         dispense(h2o1, 1, COL96, 300 * ALL_TIPS, water, labware="trough100"),
-        aspirate(ethanol, 1, COL96, 400 * ALL_TIPS, ethanol, labware="trough100"),
-        dispense(ethanol, 1, COL96, 400 * ALL_TIPS, ethanol, labware="trough100"),
+        aspirate(ethanol, 1, COL96, 400 * ALL_TIPS, etoh, labware="trough100"),
+        dispense(ethanol, 1, COL96, 400 * ALL_TIPS, etoh, labware="trough100"),
         aspirate(h2o2, 1, COL96, 450 * ALL_TIPS, water, labware="trough100"),
         dispense(h2o2, 1, COL96, 450 * ALL_TIPS, water, labware="trough100"),
-        move_liha(GridSite(31, 1, ""), 0, local=True, labware="trough100"),
+        move_liha(GridSite(31, 1, ""), 1, local=True, labware="trough100"),
     ]

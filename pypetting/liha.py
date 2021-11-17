@@ -26,7 +26,23 @@ def aspirate(
     spacing: int = 1,
     labware: Labware | str = "greiner96",
 ):
-    """Advanced aspirate command."""
+    """Advanced aspirate command.
+
+    Parameters
+    ----------
+    grid_site : GridSite
+    column : int
+    column_mask : array_like
+        Boolean mask to indicate which wells to aspirate from
+    volumes : array_like | int | float
+        Array showing which volumes each tip aspirates; a number is given, all
+        tips will aspirate that volume.
+    spacing : int, optional
+        Spacing of the tips with respect to the column mask
+    labware : Labware | str, optional
+        Labware specification to be used. (Default: Greiner 96 Well Plate)
+
+    """
 
     return _liha_command(
         cmd="Aspirate",

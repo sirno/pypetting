@@ -133,7 +133,7 @@ def move_liha(
     if positions is None:
         positions = np.array([True] * 8)
 
-    if column not in range(1, labware.cols):
+    if column not in range(1, labware.cols + 1):
         raise IndexError(f"Plate column out of bounds: {column=}")
 
     command = (
@@ -193,7 +193,7 @@ def _liha_command(
     if isinstance(labware, str):
         labware = labwares[labware]
 
-    if column not in range(1, labware.cols):
+    if column not in range(1, labware.cols + 1):
         raise IndexError(f"Plate column out of bounds: {column=}")
 
     command = (

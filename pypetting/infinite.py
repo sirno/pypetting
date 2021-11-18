@@ -26,10 +26,19 @@ def measure_infinite_reader(path: str, settings_path: str):
     with open(settings_path, encoding="utf8") as settings_file:
         settings = settings_file.read()
 
+    settings_string = (
+        settings.replace('"', "&quote;")
+        .replace("=", "&equal;")
+        .replace("  ", "")
+        .replace("\n", " ")
+        .replace("> <", "><")
+        .replace(" />", "/>")
+    )
+
     return facts(
         "ReaderNETwork",
         "ReaderNETwork_Measure",
-        f"{path}|{html.escape(settings)}",
+        f"{path}|{settings_string}",
         0,
         "",
     )

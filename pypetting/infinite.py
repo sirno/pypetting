@@ -1,7 +1,5 @@
 """Infinite Reader Commands."""
 
-import html
-
 from .misc import facts
 
 __all__ = [

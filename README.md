@@ -67,7 +67,7 @@ worklist = [
 write_gwl("worklist.gwl", worklist)
 ```
 
-## How to avoid touching EVOware
+## How to avoid EVOware
 
 The author of Pypetting has strong opinions about the design of EVOware. In
 order to implement more complex workflows modern techniques for modularization

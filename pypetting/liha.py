@@ -188,7 +188,7 @@ def _liha_command(
     labware: Labware | str = "greiner96",
 ):
     if isinstance(volumes, int | float):
-        volumes = np.array([volumes] * 8)
+        volumes = np.array(column_mask * volumes)
 
     if isinstance(labware, str):
         labware = labwares[labware]

@@ -36,3 +36,23 @@ jobs:
     - name: Test installation in venv with tox
       run: |
         tox -- -v --color=yes
+    - name: Upload to Coveralls
+      if: 
+        matrix.os == 'ubuntu-latest'
+
+      uses: AndreMiras/coveralls-python-action@develop
+      with: 
+        github-token: ${{ secrets.github_token }}
+        flag-name: ${{ matrix.python-version }}-${{ matrix.os }}
+        parallel: true
+
+  finish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls finish
+      uses: AndreMiras/coveralls-python-action@develop
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true
+

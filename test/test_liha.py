@@ -91,7 +91,7 @@ def test_move_liha():
 
 def test_well_select_minimal():
     """Test well select string with minimal length."""
-    for mask in product(*([[0, 1] * 7])):
+    for mask in product([0, 1], repeat=7):
         value = 48
         for idx, val in enumerate(mask):
             value += val * 2 ** idx

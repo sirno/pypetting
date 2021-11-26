@@ -70,9 +70,9 @@ write_gwl("worklist.gwl", worklist)
 
 ## How to avoid EVOware
 
-The authors of Pypetting have strong opinions about the design of EVOware. In
-order to implement more complex workflows modern techniques for modularization
-and abstraction of logic are required. ANY general purpose programming language
+The authors of Pypetting have strong opinions about the design of EVOware. To
+implement more complex workflows, modern techniques for modularization and
+abstraction of logic are required. ANY general purpose programming language
 provides these tools. Thus outsourcing as much logic as possible is desirable.
 
 We suggest the following workflow for any form of iterative task:

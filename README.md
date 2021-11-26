@@ -1,6 +1,7 @@
 # Pypetting
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Test](https://github.com/sirno/pypetting/actions/workflows/test.yml/badge.svg)](https://github.com/sirno/pypetting/actions/workflows/test.yml)
 
 Pypetting provides a simple set of wrappers to write complex worklists for the
 Tecan EVOware pipetting software. Unfortunately it does not entirely avoid

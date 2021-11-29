@@ -31,7 +31,7 @@ def mca_aspirate(
         (
             "B;MCAAspirate("
             f'"{liquid_class}",'
-            f"{volume},"
+            f'"{volume:g}",'
             f"{grid_site.grid},"
             f'{grid_site.site},"'
         ).encode()
@@ -59,7 +59,7 @@ def mca_dispense(
         (
             "B;MCADispense("
             f'"{liquid_class}",'
-            f"{volume},"
+            f'"{volume:g}",'
             f"{grid_site.grid},"
             f'{grid_site.site},"'
         ).encode()
@@ -87,7 +87,7 @@ def mca_mix(
         (
             "B;MCAMix("
             f'"{liquid_class}",'
-            f"{volume},"
+            f'"{volume:g}",'
             f"{grid_site.grid},"
             f'{grid_site.site},"'
         ).encode()

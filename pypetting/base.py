@@ -3,6 +3,8 @@ from dataclasses import dataclass
 
 from dataclasses_json import DataClassJsonMixin
 
+from .errors import GridSiteException
+
 __all__ = [
     "GridSite",
     "GridStack",
@@ -46,11 +48,15 @@ class GridStack(_DataClassCached):
 
     def push(self) -> GridSite:
         """Add element to stash."""
+        if self.size >= self.capacity:
+            raise GridSiteException("Can not push element to full GridStash.")
         self.size += 1
         return GridSite(self.grid, self.size - 1, self.carrier)
 
     def pop(self) -> GridSite:
         """Remove element from stash."""
+        if self.size <= 0:
+            raise GridSiteException("Can not pop element from empty GridStash.")
         self.size -= 1
         return GridSite(self.grid, self.size, self.carrier)
 
@@ -67,12 +73,16 @@ class GridQueue(_DataClassCached):
 
     def push(self) -> GridSite:
         """Add element to queue."""
-        self.last = (self.last + 1) % self.capacity
+        if self.size >= self.capacity:
+            raise GridSiteException("Can not push element to full GridQueue.")
+        self.last = (self.last + 1) % (self.capacity + 1)
         return GridSite(self.grid, self.last - 1, self.carrier)
 
     def pop(self) -> GridSite:
         """Get element from queue."""
-        self.first = (self.first + 1) % self.capacity
+        if self.size <= 0:
+            raise GridSiteException("Can not pop element from full GridQueue.")
+        self.first = (self.first + 1) % (self.capacity + 1)
         return GridSite(self.grid, self.first - 1, self.carrier)
 
     @property

@@ -1,7 +1,9 @@
 # Pypetting
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![PyPI version](https://badge.fury.io/py/pypetting.svg)](https://badge.fury.io/py/pypetting)
 [![Test](https://github.com/sirno/pypetting/actions/workflows/test.yml/badge.svg)](https://github.com/sirno/pypetting/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/sirno/pypetting/badge.svg?branch=main)](https://coveralls.io/github/sirno/pypetting?branch=main)
 
 Pypetting provides a simple set of wrappers to write complex worklists for the
 Tecan EVOware pipetting software. Unfortunately it does not entirely avoid
@@ -12,7 +14,7 @@ interactions with it to a minimum.
 
 Install using pip with `pip install pypetting`.
 
-Pypetting has only been tested with Python 3.9.6+.
+Pypetting has only been tested with Python 3.10.0.
 
 ## Examples
 

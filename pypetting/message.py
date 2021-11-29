@@ -3,6 +3,8 @@
 import argparse
 import requests
 
+__all__ = ["send_message"]
+
 
 def send_message(msg: str, url: str):
     """Send message from worklist."""

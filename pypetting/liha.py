@@ -35,8 +35,8 @@ def aspirate(
     column_mask : array_like
         Boolean mask to indicate which wells to aspirate from
     volumes : array_like | int | float
-        Array showing which volumes each tip aspirates; a number is given, all
-        tips will aspirate that volume.
+        Array showing which volumes each tip aspirates; if a number is given,
+        all tips will aspirate that volume.
     spacing : int, optional
         Spacing of the tips with respect to the column mask
     labware : Labware | str, optional
@@ -118,7 +118,8 @@ def wash(waste_volume: int | float, cleaner_volume: int | float, station: int):
 def move_liha(
     grid_site: GridSite,
     column: int,
-    positions: ArrayLike = None,
+    column_mask: ArrayLike,
+    tip_array: ArrayLike = None,
     spacing: int = 1,
     labware: Labware | str = "greiner96",
     local: bool = False,
@@ -130,21 +131,28 @@ def move_liha(
     if isinstance(labware, str):
         labware = labwares[labware]
 
-    if positions is None:
-        positions = np.array([True] * 8)
+    if tip_array is None:
+        tip_array = np.array([True] * 8)
 
     if column not in range(1, labware.cols + 1):
         raise IndexError(f"Plate column out of bounds: {column=}")
 
+    tip_array = np.array(tip_array)
+    column_mask = np.array(column_mask)
+
+    if tip_array.sum() != column_mask.sum():
+        n, m = tip_array.sum(), column_mask.sum()
+        raise IndexError(f"Number of tips in `tip_array` and `column_mask` do not match: {n} != {m})
+
     command = (
         (
             "B;MoveLiha("
-            "255,"
+            f"{bin_to_dec(tip_array)},"
             f"{grid_site.grid},"
             f"{grid_site.site},"
-            f'{spacing},"'
+            f"{spacing},\""
         ).encode()
-        + _well_select(positions, column, labware.rows, labware.cols)
+        + _well_select(column_mask, column, labware.rows, labware.cols)
         + (f'",{local:#d},{z_pos},0,{speed},0,0);').encode()
     )
 
@@ -188,7 +196,7 @@ def _liha_command(
     labware: Labware | str = "greiner96",
 ):
     if isinstance(volumes, int | float):
-        volumes = np.array(column_mask * volumes)
+        volumes = np.array(column_mask) * volumes
 
     if isinstance(labware, str):
         labware = labwares[labware]

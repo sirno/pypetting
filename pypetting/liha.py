@@ -142,7 +142,7 @@ def move_liha(
 
     if tip_array.sum() != column_mask.sum():
         n, m = tip_array.sum(), column_mask.sum()
-        raise IndexError(f"Number of tips in `tip_array` and `column_mask` do not match: {n} != {m})
+        raise IndexError(f"Number of tips in `tip_array` and `column_mask` do not match: {n} != {m}")
 
     command = (
         (

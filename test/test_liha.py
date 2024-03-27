@@ -84,7 +84,7 @@ def test_wash():
 def test_move_liha():
     """Test LiHa move."""
     assert (
-        move_liha(grid_site, 1, labware="trough100")
+            move_liha(grid_site, 1, COL96, labware="trough100")
         == b'B;MoveLiha(255,40,0,1,"0108\xaf1",0,0,0,10,0,0);'
     )
 
